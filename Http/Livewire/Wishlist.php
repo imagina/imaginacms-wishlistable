@@ -55,7 +55,7 @@ class Wishlist extends Component
     $user = \Auth::user();//Get user
     //Validate session
     if (!$user) {
-      $this->alert('warning', trans('wishlistable::wishlistable.messages.unauthenticated'), [
+      $this->alert('warning', trans('wishlistable::wishlistables.messages.unauthenticated'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")
       ]);
@@ -66,7 +66,7 @@ class Wishlist extends Component
       );
 
       //Message
-      $this->alert('success', trans('wishlistable::wishlistable.messages.productAdded'), config("asgard.isite.config.livewireAlerts"));
+      $this->alert('success', trans('wishlistable::wishlistables.messages.productAdded'), config("asgard.isite.config.livewireAlerts"));
     }
   }
 
