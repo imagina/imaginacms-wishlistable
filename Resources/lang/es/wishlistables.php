@@ -6,9 +6,10 @@ return [
   'edit resource' => 'Edit wishlists',
   'destroy resource' => 'Destroy wishlists',
   'title' => [
-    'wishlists' => 'Wishlist',
+    'wishlists' => 'Lista de Deseos',
     'create wishlist' => 'Create a wishlist',
     'edit wishlist' => 'Edit a wishlist',
+    'myWishlist' => 'Mi lista de deseos',
   ],
   'button' => [
     'create wishlist' => 'Create a wishlist',
@@ -18,9 +19,8 @@ return [
   'form' => [
   ],
   'messages' => [
-    'unauthenticated' => 'User Unauthenticated',
-    'productAdded' => 'Product added into wishlist',
-  
+    'unauthenticated' => 'Inicia sesión para guardar tu lista de deseos',
+    'productAdded' => 'Producto agregado a tu lista de deseos',
   ],
   'validation' => [
   ],

@@ -15,7 +15,16 @@ class CreateWishlistableWishlistablesTable extends Migration
         Schema::create('wishlistable__wishlistables', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            // Your fields
+  
+          $table->string('wishlistable_type');
+          $table->integer('wishlistable_id')->unsigned();
+          $table->integer('user_id')->unsigned();
+          $table->foreign('user_id')->references('id')->on(config('auth.table', 'users'))->onDelete('cascade');
+  
+          $table->index(['wishlistable_type', 'wishlistable_id', 'user_id'], 'wishlistable_type_id_foreign');
+
+          
+          // Your fields
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
 use Modules\Wishlistable\Listeners\RegisterWishlistableSidebar;
+use Livewire\Livewire;
 
 class WishlistableServiceProvider extends ServiceProvider
 {
@@ -41,8 +42,11 @@ class WishlistableServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishConfig('wishlistable', 'permissions');
+        $this->publishConfig('wishlistable', 'config');
 
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+  
+      $this->registerComponentsLivewire();
     }
 
     /**
@@ -72,6 +76,14 @@ class WishlistableServiceProvider extends ServiceProvider
 // add bindings
 
     }
-
+  
+  
+  /**
+   * Register components Livewire
+   */
+  private function registerComponentsLivewire()
+  {
+    Livewire::component('wishlistable::wishlist', \Modules\Wishlistable\Http\Livewire\Wishlist::class);
+  }
 
 }

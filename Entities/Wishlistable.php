@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Wishlistable extends Model
 {
 
-    public $translatedAttributes = [];
-    protected $fillable = [];
+    
+    protected $table = 'wishlistable__wishlistables';
+    protected $fillable = [
+      'user_id',
+      'wishlistable_type',
+      'wishlistable_id'
+    ];
 }
