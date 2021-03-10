@@ -35,7 +35,7 @@ return [
   "userMenuLinks" => [
   
     [
-      "title" => "wishlistable::wishlistables.title.wishlists",
+      "title" => "wishlistable::wishlistables.title.myWishlist",
       "routeName" => "wishlistable.wishlist.index",
       "icon" => "fa fa-heart",
     ]

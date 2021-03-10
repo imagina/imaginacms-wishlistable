@@ -2,12 +2,12 @@
 
 
 @section('title')
-  {{trans("icommerce::wishlists.title.myWishlist")}}   | @parent
+  {{trans("wishlistable::wishlistables.title.myWishlist")}}   | @parent
 @stop
 
 
 @section('profileTitle')
-  {{trans("icommerce::wishlists.title.myWishlist")}}
+  {{trans("wishlistable::wishlistables.title.myWishlist")}}
 @stop
 
 @section('profileBreadcrumb')
