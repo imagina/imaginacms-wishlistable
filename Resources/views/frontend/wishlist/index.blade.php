@@ -141,7 +141,7 @@
                 'Authorization': token
               }
             }).then(response => {
-              
+              window.livewire.emit("initWishlistQuantity")
               this.getWishlist();
             });
           }//this.user

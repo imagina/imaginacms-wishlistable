@@ -20,7 +20,8 @@ return [
   ],
   'messages' => [
     'unauthenticated' => 'Inicia sesión para guardar tu lista de deseos',
-    'productAdded' => 'Producto agregado a tu lista de deseos',
+    'itemAdded' => 'Agregado a tu lista de deseos',
+    'itemDeleted' => 'Removido de tu lista de deseos',
   ],
   'validation' => [
   ],

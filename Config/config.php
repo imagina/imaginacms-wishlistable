@@ -17,6 +17,11 @@ return [
         'multiple' => false, //if is one-to-many, multiple must be set to true
         'entity' => 'Modules\Icommerce\Entities\Product'
       ],
+      'ad' => [
+        'path' => 'Modules\Iad\Transformers\AdTransformer', //this is the transformer path
+        'multiple' => false, //if is one-to-many, multiple must be set to true
+        'entity' => 'Modules\Iad\Entities\Ad'
+      ],
     ]
   ],
   
