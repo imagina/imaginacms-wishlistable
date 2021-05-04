@@ -13,8 +13,12 @@ return [
   ],
   'button' => [
     'create wishlist' => 'Create a wishlist',
+      'addToList' => "AGREGAR A LA LISTA",
   ],
   'table' => [
+      'image' => 'Imágen',
+      'item' => 'Item',
+      'actions' => 'Acción',
   ],
   'form' => [
   ],
@@ -22,6 +26,7 @@ return [
     'unauthenticated' => 'Inicia sesión para guardar tu lista de deseos',
     'itemAdded' => 'Agregado a tu lista de deseos',
     'itemDeleted' => 'Removido de tu lista de deseos',
+    'itemsNotFound' => 'No hay items en tu lista de deseos',
   ],
   'validation' => [
   ],

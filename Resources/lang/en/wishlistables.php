@@ -13,8 +13,12 @@ return [
   ],
   'button' => [
     'create wishlist' => 'Create a wishlist',
+    'addToList' => "ADD TO WISHLIST",
   ],
   'table' => [
+      'image' => 'Image',
+      'item' => 'Item',
+      'actions' => 'Actions',
   ],
   'form' => [
   ],
@@ -22,6 +26,7 @@ return [
     'unauthenticated' => 'User Unauthenticated',
     'productAdded' => 'Product added into wishlist',
     'itemDeleted' => 'Deleted from wishlist',
+    'itemsNotFound' => 'No items available in your wishlist',
   ],
   'validation' => [
   ],
