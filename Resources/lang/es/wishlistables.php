@@ -13,6 +13,7 @@ return [
   ],
   'button' => [
     'create wishlist' => 'Create a wishlist',
+    "addToList" => "Añadir a la lista"
   ],
   'table' => [
   ],
