@@ -6,9 +6,10 @@ return [
   'edit resource' => 'Edit wishlists',
   'destroy resource' => 'Destroy wishlists',
   'title' => [
-    'wishlist' => 'My wishlist',
+    'wishlist' => 'Wishlist',
     'create wishlist' => 'Create a wishlist',
     'edit wishlist' => 'Edit a wishlist',
+    'myWishlist' => 'My wishlist',
   ],
   'button' => [
     'create wishlist' => 'Create a wishlist',
