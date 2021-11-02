@@ -12,7 +12,7 @@
 
 @section('profileBreadcrumb')
   <x-isite::breadcrumb>
-    <li class="breadcrumb-item active" aria-current="page">Lista de Deseos</li>
+    <li class="breadcrumb-item active" aria-current="page">{{trans("wishlistable::wishlistables.title.wishlist")}}</li>
   </x-isite::breadcrumb>
 @endsection
 @section('profileContent')
@@ -31,9 +31,9 @@
           <table class="table table-bordered table-shape">
             <thead>
             <tr>
-              <th>Imagen</th>
-              <th>Item</th>
-              <th>Acción</th>
+              <th>{{trans("wishlistable::wishlistables.table.image")}}</th>
+              <th>{{trans("wishlistable::wishlistables.table.item")}}</th>
+              <th>{{trans("wishlistable::wishlistables.table.action")}}</th>
             </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
               </td>
             </tr>
             <tr v-if="wishlists.length==0">
-              <td class="text-center" colspan="4">No hay items en tu lista de deseos</td>
+              <td class="text-center" colspan="4">{{trans("wishlistable::wishlistables.messages.noItems")}}</td>
             </tr>
             </tbody>
           </table>

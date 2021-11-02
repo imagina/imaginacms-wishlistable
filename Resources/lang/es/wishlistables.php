@@ -16,6 +16,9 @@ return [
     "addToList" => "Añadir a la lista"
   ],
   'table' => [
+    "image" => "Imagen",
+    "item" => "Item",
+    "action" => "Acción",
   ],
   'form' => [
   ],
@@ -23,6 +26,7 @@ return [
     'unauthenticated' => 'Inicia sesión para guardar tu lista de deseos',
     'itemAdded' => 'Agregado a tu lista de deseos',
     'itemDeleted' => 'Removido de tu lista de deseos',
+    'noItems' => 'No hay items en tu lista de deseos',
   ],
   'validation' => [
   ],

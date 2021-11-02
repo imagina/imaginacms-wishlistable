@@ -15,12 +15,17 @@ return [
     'create wishlist' => 'Create a wishlist',
   ],
   'table' => [
+    "image" => "Image",
+    "item" => "Item",
+    "action" => "Action"
   ],
   'form' => [
   ],
   'messages' => [
     'unauthenticated' => 'User Unauthenticated',
     'productAdded' => 'Product added into wishlist',
+    'itemDeleted' => 'Item removed from your wishlist',
+    'noItems' => 'No any items in your wishlist',
   
   ],
   'validation' => [
