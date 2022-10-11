@@ -44,7 +44,7 @@ class WishlistableServiceProvider extends ServiceProvider
         $this->publishConfig('wishlistable', 'permissions');
         $this->publishConfig('wishlistable', 'config');
 
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        //$this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
   
       $this->registerComponentsLivewire();
     }

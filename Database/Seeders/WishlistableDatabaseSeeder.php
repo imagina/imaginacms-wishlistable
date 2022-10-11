@@ -16,6 +16,7 @@ class WishlistableDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+         $this->call(WishlistableModuleTableSeeder::class);
         // $this->call("OthersTableSeeder");
     }
 }
