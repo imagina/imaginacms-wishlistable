@@ -13,12 +13,12 @@ class EloquentWishlistableRepository extends EloquentBaseRepository implements W
     $query = $this->model->query();
     
     /*== RELATIONSHIPS ==*/
-    if (in_array('*', $params->include)) {//If Request all relationships
+    if (in_array('*', $params->include ?? [])) {//If Request all relationships
       $query->with([]);
     } else {//Especific relationships
       $includeDefault = [];//Default relationships
       if (isset($params->include))//merge relations with default relationships
-        $includeDefault = array_merge($includeDefault, $params->include);
+        $includeDefault = array_merge($includeDefault, $params->include  ?? []);
       $query->with($includeDefault);//Add Relationships to query
     }
     
@@ -57,14 +57,18 @@ class EloquentWishlistableRepository extends EloquentBaseRepository implements W
     /*== FIELDS ==*/
     if (isset($params->fields) && count($params->fields))
       $query->select($params->fields);
-    
-    /*== REQUEST ==*/
-    if (isset($params->page) && $params->page) {
-      return $query->paginate($params->take);
-    } else {
-      $params->take ? $query->take($params->take) : false;//Take
-      return $query->get();
-    }
+	
+		/*== REQUEST ==*/
+		if (isset($params->onlyQuery) && $params->onlyQuery) {
+			return $query;
+		} else
+			if (isset($params->page) && $params->page) {
+				//return $query->paginate($params->take);
+				return $query->paginate($params->take, ['*'], null, $params->page);
+			} else {
+				isset($params->take) && $params->take ? $query->take($params->take) : false;//Take
+				return $query->get();
+			}
   }
   
   public function getItem($criteria, $params = false)

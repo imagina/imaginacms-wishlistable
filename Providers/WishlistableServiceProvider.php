@@ -84,6 +84,7 @@ class WishlistableServiceProvider extends ServiceProvider
   private function registerComponentsLivewire()
   {
     Livewire::component('wishlistable::wishlist', \Modules\Wishlistable\Http\Livewire\Wishlist::class);
+    Livewire::component('wishlistable::wishlistable', \Modules\Wishlistable\Http\Livewire\WishlistTable::class);
   }
 
 }
