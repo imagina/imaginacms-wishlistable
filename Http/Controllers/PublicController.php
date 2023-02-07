@@ -28,6 +28,12 @@ class PublicController extends BaseApiController
     
     $tpl = 'wishlistable::frontend.wishlist.index';
   
+    //Validation with lang from URL
+    $result = validateLocaleFromUrl($request,[
+      'fixedTrans'=>'wishlistable::routes.wishlist.index'
+    ]);
+    if(isset($result["reedirect"]))
+      return redirect()->to($result["url"]);
 
     return view($tpl);
   }
