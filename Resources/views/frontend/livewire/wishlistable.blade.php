@@ -17,7 +17,7 @@
 					<a href="{{$item->url}}">
 
 						<img v-if="" src="{{$item->entity->mediaFiles->mainimage->relativeSmallThumb}}" alt="{{$item->entity->name ?? $item->entity->title}}"
-							 class="img-responsive img-fluid" style="width:100px;height:auto;">
+							 class="img-responsive img-fluid w-100 h-auto">
 					</a>
 
 				</td>
@@ -25,10 +25,9 @@
 				<td><a href="{{$item->url}}">{{$item->entity->name ?? $item->entity->title}} </a></td>
 
 				<td>
-
 					<a title="Eliminar de la lista de deseos" wire:click="deleteFromWishlist({{$item->id}})"
 					   class="cart text-primary cursor-pointer">
-						<i class="fa fa-trash" style="margin: 0 5px;"></i>
+						<i class="fa-solid fa-trash mx-2"></i>
 					</a>
 				</td>
 			</tr>
