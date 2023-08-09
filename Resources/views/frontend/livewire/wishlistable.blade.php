@@ -3,9 +3,9 @@
 	<table class="table table-bordered table-shape">
 		<thead>
 		<tr>
-			<th>{{trans("wishlistable::wishlistables.table.image")}}</th>
-			<th>{{trans("wishlistable::wishlistables.table.item")}}</th>
-			<th>{{trans("wishlistable::wishlistables.table.action")}}</th>
+			<th class="wishlistable-image">{{trans("wishlistable::wishlistables.table.image")}}</th>
+			<th class="wishlistable-item">{{trans("wishlistable::wishlistables.table.item")}}</th>
+			<th class="wishlistable-action">{{trans("wishlistable::wishlistables.table.action")}}</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -24,7 +24,7 @@
 
 				<td><a href="{{$item->url}}">{{$item->entity->name ?? $item->entity->title}} </a></td>
 
-				<td>
+				<td class="text-center">
 					<a title="Eliminar de la lista de deseos" wire:click="deleteFromWishlist({{$item->id}})"
 					   class="cart text-primary cursor-pointer">
 						<i class="fa-solid fa-trash mx-2"></i>
@@ -42,3 +42,14 @@
 		</tbody>
 	</table>
 </div>
+@section('scripts')
+	@parent
+	<style>
+		#contentWishlist  #cont_products .wishlistable-image {
+			width: 150px;
+		}
+		#contentWishlist  #cont_products .wishlistable-action {
+			width: 50px;
+		}
+	</style>
+@stop
