@@ -13,7 +13,7 @@ class PublicController extends BaseApiController
 {
   protected $auth;
 
-  
+
   public function __construct(
 
   )
@@ -25,9 +25,12 @@ class PublicController extends BaseApiController
   // view products by category
   public function index(Request $request)
   {
-    
+    //Validate sessión
+    $user = \Auth::user();
+    if (!$user) return redirect("/ipanel/#/auth/login" . "?redirectTo=" . $request->fullUrl());
+
     $tpl = 'wishlistable::frontend.wishlist.index';
-  
+
     //Validation with lang from URL
     $result = validateLocaleFromUrl($request,[
       'fixedTrans'=>'wishlistable::routes.wishlist.index'
@@ -37,5 +40,5 @@ class PublicController extends BaseApiController
 
     return view($tpl);
   }
-  
+
 }
