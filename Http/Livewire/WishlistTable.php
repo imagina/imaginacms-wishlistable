@@ -4,35 +4,23 @@ namespace Modules\Wishlistable\Http\Livewire;
 
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Modules\Wishlistable\Transformers\WishlistTransformer;
 
-class Wishlist extends Component
+class WishlistTable extends Component
 {
     public $moduleView;
 
-    public $showButton;
-
-    public $quantity;
+    public $wishlist;
 
     private $params;
 
-    protected $listeners = ['addToWishList', 'deleteFromWishlist', 'initWishlistQuantity' => 'initQuantity'];
-
     public function mount(Request $request, $showButton = false)
     {
-        $this->moduleView = 'wishlistable::frontend.livewire.wishlist';
+        $this->moduleView = 'wishlistable::frontend.livewire.wishlistable';
         $this->showButton = $showButton;
         $this->quantity = null;
 
-        $this->initQuantity();
-    }
-
-    public function initQuantity()
-    {
-        $user = \Auth::user();
-
-        if (isset($user->id)) {
-            $this->quantity = $this->wishlistEntity()->where('user_id', $user->id)->get()->count();
-        }
+        $this->getWishListUser();
     }
 
     public function wishlistRepository(): wislistRepository
@@ -94,8 +82,8 @@ class Wishlist extends Component
 
             if (isset($item->id)) {
                 $item->delete();
-                $this->initQuantity();
 
+                $this->getWishListUser();
                 //Message
                 $this->alert('success', trans('wishlistable::wishlistables.messages.itemDeleted'), config('asgard.isite.config.livewireAlerts'));
             }
@@ -105,15 +93,16 @@ class Wishlist extends Component
     /**
      * Get user wishlist
      */
-    public function getWishListUser($userId)
+    public function getWishListUser($userId = null)
     {
+        if (is_null($userId)) {
+            $userId = \Auth::id();
+        }
         $params = json_decode(json_encode([
             'filter' => [
                 'user' => $userId,
             ],
         ]));
-        $wishlist = $this->wishlistRepository()->getItemsBy($params);
-
-        return $wishlist;
+        $this->wishlist = json_decode(json_encode(WishlistTransformer::collection($this->wishlistRepository()->getItemsBy($params))));
     }
 }
