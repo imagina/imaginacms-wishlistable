@@ -4,7 +4,7 @@ namespace Modules\Wishlistable\Transformers;
 
 use Modules\Core\Icrud\Transformers\CrudResource;
 
-class Wishlistable2ransformer extends CrudResource
+class WishlistableTransformer extends CrudResource
 {
   /**
   * Method to merge values with response
