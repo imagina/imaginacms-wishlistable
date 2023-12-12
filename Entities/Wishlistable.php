@@ -28,8 +28,18 @@ class Wishlistable extends CrudModel
   ];
   public $translatedAttributes = [];
   protected $fillable = [
-    'user_id',
+    'wishlist_id',
     'wishlistable_type',
     'wishlistable_id'
   ];
+
+  protected $casts = [
+    'options' => 'array'
+  ];
+
+  public function wishlist()
+  {
+    return $this->belongsTo(Wishlist::class);
+  }
+  
 }

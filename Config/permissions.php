@@ -9,7 +9,16 @@ return [
         'destroy' => 'wishlistable::wishlistables.destroy resource',
         'restore' => 'wishlistable::wishlistables.restore resource',
     ],
+    'wishlistable.wishlists' => [
+        'manage' => 'wishlistable::wishlists.manage resource',
+        'index' => 'wishlistable::wishlists.list resource',
+        'create' => 'wishlistable::wishlists.create resource',
+        'edit' => 'wishlistable::wishlists.edit resource',
+        'destroy' => 'wishlistable::wishlists.destroy resource',
+        'restore' => 'wishlistable::wishlists.restore resource',
+    ],
 // append
+
 
 
 ];

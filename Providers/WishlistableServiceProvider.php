@@ -73,7 +73,20 @@ class WishlistableServiceProvider extends ServiceProvider
                 return new \Modules\Wishlistable\Repositories\Cache\CacheWishlistableDecorator($repository);
             }
         );
+        $this->app->bind(
+            'Modules\Wishlistable\Repositories\WishlistRepository',
+            function () {
+                $repository = new \Modules\Wishlistable\Repositories\Eloquent\EloquentWishlistRepository(new \Modules\Wishlistable\Entities\Wishlist());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Wishlistable\Repositories\Cache\CacheWishlistDecorator($repository);
+            }
+        );
 // add bindings
+
 
     }
   
