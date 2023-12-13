@@ -43,7 +43,7 @@
                           :alt="$item->title" zone="mainimage" imgClasses="image-product"/>
                   <div class="mt-2 mb-3 font-weight-bold">{{$item->name}}</div>
                   
-                  @if(count($wishlists)>0)
+                  @if(!empty($wishlists) && count($wishlists)>0)
                       <select class="custom-select form-control"  name="wishlistSelected" wire:model.defer="wishlistSelected">
                         <option value="0">{{trans('wishlistable::wishlists.title.select a wishlist')}}</option>
                         @foreach ($wishlists as $list)
@@ -70,7 +70,7 @@
             @if(!is_null($user))
               <button type="button" class="btn outline" wire:click="showInforToCreate" >{{trans('wishlistable::wishlists.button.create wishlist')}}</button>
             @endif
-            @if(count($wishlists)>0)
+            @if(!empty($wishlists) && count($wishlists)>0)
               <button id="btnAddItemToWishlist" type="button" class="btn" wire:click="btnAddItemToWishlist({{$item->id}})">{{trans('wishlistable::wishlists.button.save wishlist')}}</button>
             @endif
           @else
