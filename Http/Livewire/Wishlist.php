@@ -19,15 +19,16 @@ class Wishlist extends Component
   public $wishlistSelected; //Select
   public $wishlistTitle; //Input
   public $showInfor; // Show information when create in modal
+  public $user;
  
   private $params;
   private $log = "Wishlistable: Livewire|Wishlist|";
 
-  
   public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1", $item = null)
   {
 
     //\Log::info($this->log."Mount|");
+    $this->user = \Auth::user() ?? null;
 
     $this->layout = $layout;
     $this->view = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".index";
@@ -65,10 +66,9 @@ class Wishlist extends Component
    */
   public function initQuantity()
   {
-    $user = \Auth::user();
     
-    if(isset($user->id))
-      $this->quantity = $this->wishlistService()->getQuantity($user);
+    if(isset($this->user->id))
+      $this->quantity = $this->wishlistService()->getQuantity($this->user);
   }
   
   /**
@@ -94,10 +94,8 @@ class Wishlist extends Component
   {
     $this->wishlists = null;
 
-    $user = \Auth::user();//Get user
-
-    if(!is_null($user)){
-      $wishlists = $this->wishlistService()->getUserWishlists($user->id);
+    if(!is_null($this->user)){
+      $wishlists = $this->wishlistService()->getUserWishlists($this->user->id);
       
       if(!is_null($wishlists)){
         $this->wishlists = $wishlists;
@@ -115,11 +113,12 @@ class Wishlist extends Component
   public function addToWishList($data = null)
   {
     //\Log::info($this->log."addToWishList");
+
+    //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
     
-    $user = \Auth::user();//Get user
     //Validate session
-    if (!$user) {
+    if (!$this->user) {
       $this->alert('warning', trans('wishlistable::wishlistables.messages.unauthenticated'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")
@@ -153,13 +152,15 @@ class Wishlist extends Component
       if($continue){
 
         //Create or update list
-        $result = $this->wishlistService()->createOrUpdateList($data,$user);
+        $result = $this->wishlistService()->createOrUpdateList($data,$this->user);
 
         //Case: Modal Wishlist Index | After Create List
         if(isset($data['title']) && !isset($fromModalList)){
-          //Update the Isite ItemList
+          //Set message
           $message = "wishlistable::wishlistables.messages.listAdded";
+          //Update the Isite ItemList
           $this->emit("itemsListGetData",['onlyResetList' => true]);
+
         }else{
           $this->initQuantity();
         }
@@ -233,9 +234,9 @@ class Wishlist extends Component
   {
 
     //\Log::info($this->log."deleteFromWishlist");
-    $user = \Auth::user();//Get user
+   
     //Validate session
-    if (!$user) {
+    if (!$this->user) {
       $this->alert('warning', trans('wishlistable::wishlistables.messages.unauthenticated'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")

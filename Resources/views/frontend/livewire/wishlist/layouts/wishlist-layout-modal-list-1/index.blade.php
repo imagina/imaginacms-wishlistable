@@ -35,35 +35,44 @@
         <div class="modal-body">
             <div class="text-center mb-3">
 
-              <!-- DEFAULT -->
-              @if($showInfor==false)
+              @if(!is_null($user))
+                <!-- DEFAULT -->
+                @if($showInfor==false)
 
-                <x-media::single-image :mediaFiles="$item->mediaFiles()" :isMedia="true"
-                        :alt="$item->title" zone="mainimage" imgClasses="image-product"/>
-                <div class="mt-2 mb-3 font-weight-bold">{{$item->name}}</div>
-                
-                @if(!empty($wishlists))
-                    <select class="custom-select form-control"  name="wishlistSelected" wire:model.defer="wishlistSelected">
-                      <option value="0">{{trans('wishlistable::wishlists.title.select a wishlist')}}</option>
-                      @foreach ($wishlists as $list)
-                        <option value="{{$list->id}}">{{$list->title}}</option>
-                      @endforeach
-                    </select>
+                  <x-media::single-image :mediaFiles="$item->mediaFiles()" :isMedia="true"
+                          :alt="$item->title" zone="mainimage" imgClasses="image-product"/>
+                  <div class="mt-2 mb-3 font-weight-bold">{{$item->name}}</div>
+                  
+                  @if(count($wishlists)>0)
+                      <select class="custom-select form-control"  name="wishlistSelected" wire:model.defer="wishlistSelected">
+                        <option value="0">{{trans('wishlistable::wishlists.title.select a wishlist')}}</option>
+                        @foreach ($wishlists as $list)
+                          <option value="{{$list->id}}">{{$list->title}}</option>
+                        @endforeach
+                      </select>
+                  @endif
+
+                @else
+                    <!-- INFOR TO CREATE LIST -->
+                    @include('wishlistable::frontend.livewire.partials.input-create')
                 @endif
 
               @else
-                  <!-- INFOR TO CREATE LIST -->
-                  @include('wishlistable::frontend.livewire.partials.input-create')
+                <div id="msj-user-not-logged" class="mt-4">{{trans('wishlistable::wishlistables.messages.unauthenticated')}}</div>
               @endif
                 
           </div>
         </div>
         <div class="modal-footer">
 
+          <!-- BUTTONS TO ADD ITEM IN THE WISHLIST SELECTED -->
           @if($showInfor==false)
-            <!-- BUTTONS TO ADD ITEM IN THE WISHLIST SELECTED -->
-            <button type="button" class="btn outline" wire:click="showInforToCreate" >{{trans('wishlistable::wishlists.button.create wishlist')}}</button>
-            <button id="btnAddItemToWishlist" type="button" class="btn" wire:click="btnAddItemToWishlist({{$item->id}})">{{trans('wishlistable::wishlists.button.save wishlist')}}</button>
+            @if(!is_null($user))
+              <button type="button" class="btn outline" wire:click="showInforToCreate" >{{trans('wishlistable::wishlists.button.create wishlist')}}</button>
+            @endif
+            @if(count($wishlists)>0)
+              <button id="btnAddItemToWishlist" type="button" class="btn" wire:click="btnAddItemToWishlist({{$item->id}})">{{trans('wishlistable::wishlists.button.save wishlist')}}</button>
+            @endif
           @else
             <!-- BUTTONS TO CREATE LIST -->
             <button type="button" class="btn"  wire:click="addToWishList('createFromModalList')" >{{trans('wishlistable::wishlists.button.create wishlist')}}</button>
