@@ -28,7 +28,7 @@
                             itemComponentNamespace="Modules\Wishlistable\View\Components\Item"
                             entityName="Wishlist"
                             :showTitle="false"
-                            :params="['filter' => ['userId' => $user->id],'take' => setting('icommerce::product-per-page',null,12)]"
+                            :params="['filter' => ['userId' => $user->id],'take' => setting('wishlistable::items-per-page',null,12)]"
                             :configOrderBy="config('asgard.wishlistable.config.orderBy')"
                             :pagination="config('asgard.wishlistable.config.pagination')"
                             :responsiveTopContent="['mobile'=>false,'desktop'=>false]"
