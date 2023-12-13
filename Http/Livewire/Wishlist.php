@@ -180,6 +180,10 @@ class Wishlist extends Component
           $this->dispatchBrowserEvent('wishlist-close-modal');
         }
 
+        //Case: Button add wishlist in product show (next to add cart button)
+        if(isset($data['fromBtnAddWishlist'])){
+            $this->getWishlists();
+        }
     
         //Message
         $this->alert('success', trans($message), config("asgard.isite.config.livewireAlerts"));
