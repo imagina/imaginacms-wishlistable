@@ -7,8 +7,8 @@ use Modules\Core\Icrud\Entities\CrudModel;
 class Wishlist extends CrudModel
 {
 
-  //$forceDeleting
-  // $this->forceDeleting = true;
+  
+  protected $forceDeleting = true; //DELETE ALL FROM DB
 
   protected $table = 'wishlistable__wishlists';
   public $transformer = 'Modules\Wishlistable\Transformers\WishlistTransformer';
