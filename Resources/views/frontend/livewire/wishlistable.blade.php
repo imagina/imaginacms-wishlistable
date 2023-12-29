@@ -1,55 +1,39 @@
-<div class="table-responsive">
+<div class="wishlistable">
 	@include('isite::frontend.partials.preloader')
-	<table class="table table-bordered table-shape">
-		<thead>
-		<tr>
-			<th class="wishlistable-image">{{trans("wishlistable::wishlistables.table.image")}}</th>
-			<th class="wishlistable-item">{{trans("wishlistable::wishlistables.table.item")}}</th>
-			<th class="wishlistable-action">{{trans("wishlistable::wishlistables.table.action")}}</th>
-		</tr>
-		</thead>
-		<tbody>
-		@foreach($wishlist as $item)
-			@if(isset($item->entity))
 
-			<tr>
-				<td>
-					<a href="{{$item->url}}">
+	
+	@if(count($wishlists)==0)
+		@include("wishlistable::frontend.partials.content-infor")
+		@include("wishlistable::frontend.partials.content-steps")
+	@else
 
-						<img v-if="" src="{{$item->entity->mediaFiles->mainimage->relativeSmallThumb}}" alt="{{$item->entity->name ?? $item->entity->title}}"
-							 class="img-responsive img-fluid w-100 h-auto">
-					</a>
+		<div id="all-lists" class="p-4 mx-4">
 
-				</td>
+			@include("wishlistable::frontend.partials.content-infor")
 
-				<td><a href="{{$item->url}}">{{$item->entity->name ?? $item->entity->title}} </a></td>
+			<div id="lists">
 
-				<td class="text-center">
-					<a title="Eliminar de la lista de deseos" wire:click="deleteFromWishlist({{$item->id}})"
-					   class="cart text-primary cursor-pointer">
-						<i class="fa-solid fa-trash mx-2"></i>
-					</a>
-				</td>
-			</tr>
+				@foreach($wishlists as $list)
+					<div class="list list-{{$list->id}} p-4 mx-4 my-3  border">
 
-			@endif
-		@endforeach
-		@if(empty($wishlist))
-		<tr>
-			<td class="text-center" colspan="4">{{trans("wishlistable::wishlistables.messages.noItems")}}</td>
-		</tr>
-		@endif
-		</tbody>
-	</table>
+						<h3>Lista: {{$list->title}}</h3>
+
+						<a title="Eliminar" class="cart text-primary cursor-pointer" wire:click="deleteFromWishlist({{$list->id}})">
+							Eliminar lista	
+						</a>
+
+						<a title="Ver información" href="{{$list->url}}" class="cart text-primary cursor-pointer">
+							Ver información	
+						</a>
+
+					</div>
+				@endforeach
+
+			</div>
+
+		</div>
+		
+
+	@endif
+
 </div>
-@section('scripts')
-	@parent
-	<style>
-		#contentWishlist  #cont_products .wishlistable-image {
-			width: 150px;
-		}
-		#contentWishlist  #cont_products .wishlistable-action {
-			width: 50px;
-		}
-	</style>
-@stop
