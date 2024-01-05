@@ -64,26 +64,21 @@ class PublicController extends BaseApiController
     $wishlist = $this->wishlistableService->getWishlist($listId);
 
     //default tpl (Default es la de product)
-    $tpl = 'wishlistable::frontend.wishlist.index-list.default.index';
+    $tpl = 'wishlistable::frontend.wishlist.index-list.default.index';//In Module
+    $ttpl = 'wishlist.index-list.default.index';//in Theme
+
+    //Validation View
+    if (view()->exists($ttpl)) $tpl = $ttpl;
 
     if(!is_null($wishlist)){
 
       $type = $this->wishlistableService->getType($wishlist->type);
 
-      //specific tpl
+      //specific tpl (Item list default is with 'product information' but others may need to be customized later depnds of wishlist type)
       $tplList = 'wishlistable::frontend.wishlist.index-list.'.$type.'.index';
 
-      //Get Ids From Items
-      //$itemIds = null;
-      //$items = $wishlist->wishlistables()->get();
-
-      /*
-      if(count($items)>0)
-        $itemIds = $items->pluck('wishlistable_id');
-      */
-
       //Validation View
-      if (view()->exists($tplList)) $tpl = $ttpl;
+      if (view()->exists($tplList)) $tpl = $tplList;
 
       //Data to view
       $data = [
