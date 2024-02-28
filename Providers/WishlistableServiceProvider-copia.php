@@ -43,8 +43,6 @@ class WishlistableServiceProvider extends ServiceProvider
     {
         $this->publishConfig('wishlistable', 'permissions');
         $this->publishConfig('wishlistable', 'config');
-        $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'settings'), "asgard.wishlistable.settings");
-        $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'settings-fields'), "asgard.wishlistable.settings-fields");
         $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'blocks'), "asgard.wishlistable.blocks");
 
         //$this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
@@ -76,20 +74,7 @@ class WishlistableServiceProvider extends ServiceProvider
                 return new \Modules\Wishlistable\Repositories\Cache\CacheWishlistableDecorator($repository);
             }
         );
-        $this->app->bind(
-            'Modules\Wishlistable\Repositories\WishlistRepository',
-            function () {
-                $repository = new \Modules\Wishlistable\Repositories\Eloquent\EloquentWishlistRepository(new \Modules\Wishlistable\Entities\Wishlist());
-
-                if (! config('app.cache')) {
-                    return $repository;
-                }
-
-                return new \Modules\Wishlistable\Repositories\Cache\CacheWishlistDecorator($repository);
-            }
-        );
 // add bindings
-
 
     }
   
