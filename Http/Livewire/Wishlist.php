@@ -15,7 +15,7 @@ class Wishlist extends Component
   public $layout;
   public $type;
   public $item;// Case Product Show
-  public $wishlists; // All WWishlistsishlists
+  public $wishlists; // All Wishlists
   public $wishlistSelected; //Select
   public $wishlistTitle; //Input
   public $showInfor; // Show information when create in modal
