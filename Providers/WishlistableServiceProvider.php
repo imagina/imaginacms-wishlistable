@@ -45,6 +45,7 @@ class WishlistableServiceProvider extends ServiceProvider
         $this->publishConfig('wishlistable', 'config');
         $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'settings'), "asgard.wishlistable.settings");
         $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'settings-fields'), "asgard.wishlistable.settings-fields");
+        $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'blocks'), "asgard.wishlistable.blocks");
 
         //$this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
   
