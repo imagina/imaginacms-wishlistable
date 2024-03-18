@@ -13,6 +13,8 @@ return [
   ],
   'button' => [
     'create wishlist' => 'Create a wishlist',
+    "addToList" => "Add to List",
+    'addMoreProducts' => 'Add more products'
   ],
   'table' => [
     "image" => "Image",
