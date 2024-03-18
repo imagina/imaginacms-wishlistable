@@ -92,6 +92,9 @@
     @include("wishlistable::frontend.partials.style-modal")
     
     <script type="text/javascript" defer>
+      $(document).ready(function(){
+        $('#listCheck').tooltip();
+      });
 
       //Event to close modal
       window.addEventListener('wishlist-close-modal', event => {
