@@ -20,11 +20,18 @@ class Wishlist extends Component
   public $wishlistTitle; //Input
   public $showInfor; // Show information when create in modal
   public $user;
+  public $label;
+  public $icon;
+  public $classWishlists;
+  public $styleWishlists;
  
   private $params;
   private $log = "Wishlistable: Livewire|Wishlist|";
 
-  public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1", $item = null)
+  public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1",
+                        $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
+                        $icon = 'fa fa-heart'
+  )
   {
 
     //\Log::info($this->log."Mount|");
@@ -36,6 +43,10 @@ class Wishlist extends Component
 
     $this->showButton = $showButton;
     $this->quantity = null;
+    $this->label = $label;
+    $this->icon = $icon;
+    $this->classWishlists = $classWishlists;
+    $this->styleWishlists = $styleWishlists;
     
     //Only for this case
     if($this->layout=="wishlist-layout-modal-list-1"){
