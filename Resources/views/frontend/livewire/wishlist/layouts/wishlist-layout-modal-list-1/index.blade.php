@@ -1,27 +1,8 @@
 <div class="wishlist-layout-modal-list-1">
 
-  <div class="text-right">
-    <div id="listCheck"
-         class="mb-2 d-inline-block"
-         data-toggle="tooltip"
-         data-placement="top"
-         title=" {{trans('wishlistable::wishlists.title.add to wishlist')}}">
-      
-      <x-isite::button
-              style="outline"
-              buttonClasses="button-small rounded-pill"
-              :withIcon="true"
-              iconClass="fa-solid fa-list-check"
-              sizeLabel="16"
-              color="dark"
-              dataTarget="#wishlistAddList"
+  @include($layoutButton)
 
-      />
-      
-    </div>
-  </div>
-
-  <div wire:ignore.self class="modal fade wishlist-modal-list" id="wishlistAddList" tabindex="-1" role="dialog" aria-labelledby="wishlistModalListLabel" aria-hidden="true">
+  <div wire:ignore.self class="modal fade wishlist-modal-list" id="wishlistAddList{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="wishlistModalListLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -98,7 +79,7 @@
 
       //Event to close modal
       window.addEventListener('wishlist-close-modal', event => {
-					$('#wishlistAddList').modal('hide');
+        $('#wishlistAddList'+event.detail.entityId).modal('hide');
 			})
 
     
