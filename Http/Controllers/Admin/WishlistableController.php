@@ -2,12 +2,13 @@
 
 namespace Modules\Wishlistable\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Wishlistable\Entities\Wishlistable;
 use Modules\Wishlistable\Http\Requests\CreateWishlistableRequest;
 use Modules\Wishlistable\Http\Requests\UpdateWishlistableRequest;
 use Modules\Wishlistable\Repositories\WishlistableRepository;
+use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 
 class WishlistableController extends AdminBaseController
 {

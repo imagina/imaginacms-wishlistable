@@ -2,12 +2,13 @@
 
 namespace Modules\Wishlistable\Providers;
 
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Illuminate\Support\ServiceProvider;
-use Livewire\Livewire;
+use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Core\Events\BuildingSidebar;
 use Modules\Core\Events\LoadingBackendTranslations;
-use Modules\Core\Traits\CanPublishConfiguration;
 use Modules\Wishlistable\Listeners\RegisterWishlistableSidebar;
+use Livewire\Livewire;
 
 class WishlistableServiceProvider extends ServiceProvider
 {
@@ -38,6 +39,9 @@ class WishlistableServiceProvider extends ServiceProvider
     {
         $this->publishConfig('wishlistable', 'permissions');
         $this->publishConfig('wishlistable', 'config');
+        $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'settings'), "asgard.wishlistable.settings");
+        $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'settings-fields'), "asgard.wishlistable.settings-fields");
+        $this->mergeConfigFrom($this->getModuleConfigFilePath('wishlistable', 'blocks'), "asgard.wishlistable.blocks");
 
         //$this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
@@ -66,7 +70,21 @@ class WishlistableServiceProvider extends ServiceProvider
                 return new \Modules\Wishlistable\Repositories\Cache\CacheWishlistableDecorator($repository);
             }
         );
-        // add bindings
+        $this->app->bind(
+            'Modules\Wishlistable\Repositories\WishlistRepository',
+            function () {
+                $repository = new \Modules\Wishlistable\Repositories\Eloquent\EloquentWishlistRepository(new \Modules\Wishlistable\Entities\Wishlist());
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\Wishlistable\Repositories\Cache\CacheWishlistDecorator($repository);
+            }
+        );
+// add bindings
+
+
     }
 
   /**
