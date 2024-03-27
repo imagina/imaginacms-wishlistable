@@ -2,10 +2,10 @@
 
 namespace Modules\Wishlistable\Repositories\Cache;
 
-use Modules\Core\Repositories\Cache\BaseCacheDecorator;
 use Modules\Wishlistable\Repositories\WishlistableRepository;
+use Modules\Core\Icrud\Repositories\Cache\BaseCacheCrudDecorator;
 
-class CacheWishlistableDecorator extends BaseCacheDecorator implements WishlistableRepository
+class CacheWishlistableDecorator extends BaseCacheCrudDecorator implements WishlistableRepository
 {
     public function __construct(WishlistableRepository $wishlistable)
     {
