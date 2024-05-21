@@ -25,12 +25,12 @@ class WishlistTable extends Component
   public function mount(Request $request, $showButton = false, $mainWishlist = null)
   {
 
-    if(is_null($mainWishlist)){
+    if (is_null($mainWishlist)) {
 
       $this->moduleView = 'wishlistable::frontend.livewire.wishlistable';
       $this->getWishlists();
 
-    }else{
+    } else {
 
       //Set wishlist
       $this->wishlist = $mainWishlist;
@@ -40,7 +40,7 @@ class WishlistTable extends Component
 
       //specific tpl
       $type = $this->wishlistService()->getType($mainWishlist->type);
-      $tplList = 'wishlistable::frontend.livewire.index-list.'.$type.'.index';
+      $tplList = 'wishlistable::frontend.livewire.index-list.' . $type . '.index';
       if (view()->exists($tplList)) $tpl = $ttpl;
 
       //Set view
@@ -82,7 +82,7 @@ class WishlistTable extends Component
 
   }
 
-   /**
+  /**
    * Wishlist - GET
    */
   public function getWishlists()
@@ -92,7 +92,7 @@ class WishlistTable extends Component
     $user = \Auth::user();//Get user
     $wishlists = $this->wishlistService()->getUserWishlists($user->id);
 
-    if(!is_null($wishlists)){
+    if (!is_null($wishlists)) {
       $this->wishlists = $wishlists;
     }
 
@@ -103,7 +103,7 @@ class WishlistTable extends Component
    */
   public function addToWishList($data)
   {
-    \Log::info($this->log."addToWishList");
+    \Log::info($this->log . "addToWishList");
 
     $user = \Auth::user();//Get user
     //Validate session
@@ -143,7 +143,7 @@ class WishlistTable extends Component
       //Search wishlist
       $wishlist = $this->wishlistService()->getWishlist($id);
 
-      if(isset($wishlist->id)){
+      if (isset($wishlist->id)) {
         $wishlist->delete();
 
         $this->getWishlists();
@@ -162,14 +162,14 @@ class WishlistTable extends Component
 
     dd("WISHLISTABLE - Otro");
 
-    if(empty($this->wishlistTitle)){
+    if (empty($this->wishlistTitle)) {
 
       $this->alert('warning', trans('wishlistable::wishlistables.messages.title empty'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")
       ]);
 
-    }else{
+    } else {
 
       //set data
       $user = \Auth::user();
@@ -179,7 +179,7 @@ class WishlistTable extends Component
       ];
 
       //create
-      $result = $this->wishlistService()->createWishlist($data,$user);
+      $result = $this->wishlistService()->createWishlist($data, $user);
 
       //Refresh
       $this->wishlistTitle = "";
@@ -187,9 +187,7 @@ class WishlistTable extends Component
 
       //Message
       $this->alert('success', trans('wishlistable::wishlistables.messages.listAdded'), config("asgard.isite.config.livewireAlerts"));
-
     }
-
   }
 
   /**
@@ -204,8 +202,8 @@ class WishlistTable extends Component
   }
 
   /**
-  *  Wishlist ITEMS - DELETE
-  */
+   *  Wishlist ITEMS - DELETE
+   */
   public function deleteItemFromWishlist($id)
   {
 
@@ -221,17 +219,13 @@ class WishlistTable extends Component
       //Search wishlist
       $item = $this->wishlistService()->getItemFromWishlist($id);
 
-      if(isset($item->id)){
+      if (isset($item->id)) {
         $item->delete();
 
         $this->getWishlistItems();
         //Message
         $this->alert('success', trans('wishlistable::wishlistables.messages.wishlistDeleted'), config("asgard.isite.config.livewireAlerts"));
       }
-
-
     }
   }
-
-
 }
