@@ -33,7 +33,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     //Global method "deleteFromItemList in Isite | Remember depends some attributes in item lists (Check wishlist/index-list/default/index)
-					window.livewire.emit('deleteFromItemList',id);
+					window.livewire.dispatch('deleteFromItemList',id);
                 }
             });
         }
