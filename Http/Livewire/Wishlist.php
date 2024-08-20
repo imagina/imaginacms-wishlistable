@@ -11,6 +11,7 @@ class Wishlist extends Component
   public $view;
   public $showButton;
   public $quantity;
+  public  $id;
 
   public $layout;
   public $type;
@@ -30,7 +31,7 @@ class Wishlist extends Component
 
   public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1",
                                 $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
-                                $icon = 'fa fa-heart'
+                                $icon = 'fa fa-heart', $id = null
   )
   {
 
@@ -56,6 +57,8 @@ class Wishlist extends Component
     }
 
     $this->initQuantity();
+
+    $this->id = $id ?? 'wishlist' . rand(0, 99);
   }
 
   /**
