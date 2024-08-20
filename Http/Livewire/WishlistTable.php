@@ -9,17 +9,18 @@ use Modules\Wishlistable\Transformers\WishlistTransformer;
 class WishlistTable extends Component
 {
 
-  use LivewireAlert;
-  /*
-  * Attributes From Config
-  */
   public $moduleView;
+
   public $wishlist; //Specific wishlist
   private $params;
+
   public $wishlists;
   public $items; //Wishlistable
+
   public $wishlistTitle;
+
   private $log = "Wishlistable: Livewire|Wishlistable|";
+
 
   public function mount(Request $request, $showButton = false, $mainWishlist = null)
   {

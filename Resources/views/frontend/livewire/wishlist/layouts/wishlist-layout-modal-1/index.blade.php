@@ -96,7 +96,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     console.log('Emit-Create');
-					window.livewire.dispatch('addToWishList_{{$this->id}}',{'title' : result.value});
+					window.livewire.emit('addToWishList_{{$this->id}}',{'title' : result.value});
                 }
             });
         }

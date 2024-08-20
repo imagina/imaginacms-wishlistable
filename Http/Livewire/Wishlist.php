@@ -4,15 +4,10 @@ namespace Modules\Wishlistable\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Wishlist extends Component
 {
 
-  use LivewireAlert;
-  /*
-  * Attributes From Config
-  */
   public $view;
   public $showButton;
   public $quantity;
@@ -175,7 +170,7 @@ class Wishlist extends Component
           //Set message
           $message = "wishlistable::wishlistables.messages.listAdded";
           //Update the Isite ItemList
-          $this->dispatch("itemsListGetData", ['onlyResetList' => true]);
+          $this->emit("itemsListGetData", ['onlyResetList' => true]);
 
         } else {
           $this->initQuantity();
@@ -280,7 +275,7 @@ class Wishlist extends Component
         $item->delete();
 
         //Update the Isite - ItemList
-        $this->dispatch("itemsListGetData", ['onlyResetList' => true]);
+        $this->emit("itemsListGetData", ['onlyResetList' => true]);
 
         //Message
         $this->alert('success', trans('wishlistable::wishlistables.messages.itemDeleted'), config("asgard.isite.config.livewireAlerts"));
