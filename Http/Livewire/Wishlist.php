@@ -55,9 +55,13 @@ class Wishlist extends Component
       $this->wishlistSelected = null;
       $this->showInfor = false;
       $this->getWishlists();
+    }else{
+      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
+      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
+      $this->initQuantity();
     }
    
-    $this->initQuantity();
+    
   }
 
   /**
