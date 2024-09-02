@@ -66,7 +66,8 @@
                 & img {
                     width: 300px !important;
                     height: auto;
-                object-fit: contain;
+                    object-fit: contain;
+                    max-height: 200px;
             }
 	    }
 
