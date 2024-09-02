@@ -70,12 +70,20 @@ class Wishlist extends Component
    */
   protected function getListeners()
   {
-    return [
-      'addToWishList',
-      'deleteFromWishlist',
+    
+    //Base Listeners
+    $base = [
+      'deleteFromWishlist' => "deleteFromWishlist",
       'initWishlistQuantity' => "initQuantity",
-      'addToWishList_' . $this->id => "addToWishList" // Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
+      'addToWishList_'.$this->id => "addToWishList" // Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
     ];
+
+    //Case: Button add wishlist in product show (next to add cart button)
+    //Esto es para que evitar que ingrese varias veces xq luego tambien pueden llamar el componente dentro de carruseles etc.
+    if($this->layout=="wishlist-layout-1")
+      $base['addToWishList'] = 'addToWishList';
+
+    return $base;
 
   }
 
@@ -130,7 +138,8 @@ class Wishlist extends Component
    */
   public function addToWishList($data = null)
   {
-    //\Log::info($this->log."addToWishList");
+    //\Log::info($this->log."Layout: ".$this->layout);
+    //\Log::info($this->log."addToWishList|Data: ".json_encode($data));
 
     //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
