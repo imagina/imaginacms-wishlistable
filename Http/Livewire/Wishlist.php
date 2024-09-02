@@ -14,6 +14,7 @@ class Wishlist extends Component
   public  $id;
 
   public $layout;
+  public $layoutButton;
   public $type;
   public $item;// Case Product Show
   public $wishlists; // All Wishlists
@@ -31,7 +32,7 @@ class Wishlist extends Component
 
   public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1",
                                 $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
-                                $icon = 'fa fa-heart', $id = null
+                                $icon = 'fa fa-heart', $layoutButton = "icon", $id = null
   )
   {
 
@@ -39,6 +40,7 @@ class Wishlist extends Component
     $this->user = \Auth::user() ?? null;
 
     $this->layout = $layout;
+    $this->layoutButton = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".buttons.".$layoutButton;
     $this->view = "wishlistable::frontend.livewire.wishlist.layouts." . $this->layout . ".index";
     $this->item = $item;
 
@@ -191,7 +193,7 @@ class Wishlist extends Component
 
         //Case: Modal Wishlist in product show | After Add item to Wishlist selected
         if (isset($data['closeModal'])) {
-          $this->dispatchBrowserEvent('wishlist-close-modal');
+          $this->dispatchBrowserEvent('wishlist-close-modal',["entityId" => $data['entityId']]);
         }
 
         //Case: Button add wishlist in product show (next to add cart button)
