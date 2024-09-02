@@ -138,8 +138,8 @@ class Wishlist extends Component
   public function addToWishList($data = null)
   {
 
-    \Log::info($this->log."Layout: ".$this->layout);
-    \Log::info($this->log."addToWishList|Data: ".json_encode($data));
+    //\Log::info($this->log."Layout: ".$this->layout);
+    //\Log::info($this->log."addToWishList|Data: ".json_encode($data));
    
     //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
