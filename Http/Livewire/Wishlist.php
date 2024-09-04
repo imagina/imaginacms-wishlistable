@@ -4,9 +4,11 @@ namespace Modules\Wishlistable\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Wishlist extends Component
 {
+  use LivewireAlert;
 
   public $view;
   public $showButton;
