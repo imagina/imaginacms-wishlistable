@@ -7,6 +7,8 @@
   }
 & .tooltip-inner {
       background-color: var(--secondary);
+      color: var(--primary);
+      font-weight: 600;
   }
 }
 
