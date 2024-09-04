@@ -42,6 +42,7 @@ return [
             'title' => 'wishlistable::wishlistables.title.myWishlist',
             'routeName' => 'wishlistable.wishlist.index',
             'icon' => 'fa fa-heart',
+            "activeBySettingName" => "wishlistable::wishlistActive"
         ],
     ],
 

@@ -13,6 +13,7 @@ class Wishlist extends Component
   public $quantity;
 
   public $layout;
+  public $layoutButton;
   public $type;
   public $item;// Case Product Show
   public $wishlists; // All Wishlists
@@ -30,7 +31,7 @@ class Wishlist extends Component
 
   public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1",
                                 $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
-                                $icon = 'fa fa-heart'
+                                $icon = 'fa fa-heart', $layoutButton = "icon"
   )
   {
 
@@ -38,6 +39,7 @@ class Wishlist extends Component
     $this->user = \Auth::user() ?? null;
 
     $this->layout = $layout;
+    $this->layoutButton = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".buttons.".$layoutButton;
     $this->view = "wishlistable::frontend.livewire.wishlist.layouts." . $this->layout . ".index";
     $this->item = $item;
 
@@ -53,8 +55,11 @@ class Wishlist extends Component
       $this->wishlistSelected = null;
       $this->showInfor = false;
       $this->getWishlists();
+    }else{
+      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
+      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
+      $this->initQuantity();
     }
-
     $this->initQuantity();
   }
 
@@ -63,12 +68,20 @@ class Wishlist extends Component
    */
   protected function getListeners()
   {
-    return [
-      'addToWishList',
-      'deleteFromWishlist',
+    
+    //Base Listeners
+    $base = [
+      'deleteFromWishlist' => "deleteFromWishlist",
       'initWishlistQuantity' => "initQuantity",
-      'addToWishList_' . $this->id => "addToWishList" // Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
+      'addToWishList_'.$this->id => "addToWishList" // Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
     ];
+
+    //Case: Button add wishlist in product show (next to add cart button)
+    //Esto es para que evitar que ingrese varias veces xq luego tambien pueden llamar el componente dentro de carruseles etc.
+    if($this->layout=="wishlist-layout-1")
+      $base['addToWishList'] = 'addToWishList';
+
+    return $base;
 
   }
 
@@ -123,7 +136,8 @@ class Wishlist extends Component
    */
   public function addToWishList($data = null)
   {
-    //\Log::info($this->log."addToWishList");
+    //\Log::info($this->log."Layout: ".$this->layout);
+    //\Log::info($this->log."addToWishList|Data: ".json_encode($data));
 
     //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
@@ -188,7 +202,7 @@ class Wishlist extends Component
 
         //Case: Modal Wishlist in product show | After Add item to Wishlist selected
         if (isset($data['closeModal'])) {
-          $this->dispatchBrowserEvent('wishlist-close-modal');
+          $this->dispatchBrowserEvent('wishlist-close-modal',["entityId" => $data['entityId']]);
         }
 
         //Case: Button add wishlist in product show (next to add cart button)
