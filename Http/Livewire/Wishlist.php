@@ -62,6 +62,7 @@ class Wishlist extends Component
       //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
       $this->initQuantity();
     }
+    $this->initQuantity();
   }
 
   /**
