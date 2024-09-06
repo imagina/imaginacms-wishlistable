@@ -4,14 +4,15 @@ namespace Modules\Wishlistable\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Wishlist extends Component
 {
+  use LivewireAlert;
 
   public $view;
   public $showButton;
   public $quantity;
-  public  $id;
 
   public $layout;
   public $layoutButton;
@@ -32,7 +33,7 @@ class Wishlist extends Component
 
   public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1",
                                 $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
-                                $icon = 'fa fa-heart', $layoutButton = "icon", $id = null
+                                $icon = 'fa fa-heart', $layoutButton = "icon"
   )
   {
 
@@ -57,12 +58,11 @@ class Wishlist extends Component
       $this->showInfor = false;
       $this->getWishlists();
     }else{
-      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
+      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes
       //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
       $this->initQuantity();
     }
-
-    $this->id = $id ?? 'wishlist' . rand(0, 99);
+    $this->initQuantity();
   }
 
   /**
@@ -70,7 +70,7 @@ class Wishlist extends Component
    */
   protected function getListeners()
   {
-    
+
     //Base Listeners
     $base = [
       'deleteFromWishlist' => "deleteFromWishlist",

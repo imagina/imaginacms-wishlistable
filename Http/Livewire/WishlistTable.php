@@ -5,9 +5,11 @@ namespace Modules\Wishlistable\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Modules\Wishlistable\Transformers\WishlistTransformer;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class WishlistTable extends Component
 {
+  use LivewireAlert;
 
   public $moduleView;
 
