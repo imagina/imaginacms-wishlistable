@@ -41,5 +41,26 @@ class Wishlistable extends CrudModel
   {
     return $this->belongsTo(Wishlist::class);
   }
+
+  public function getUrlAttribute($locale = null)
+  { 
+    $url = "";
+    $currentLocale = $locale ?? locale();
+
+    $url = route($currentLocale.'.wishlistable.wishlist.indexList',['listId' => $this->wishlist_id]);
+
+    return $url;
+  }
+
+  public function getCacheClearableData()
+  {
+
+      return [
+        'urls' => [
+          $this->url
+        ]
+      ];
+
+  }
   
 }
