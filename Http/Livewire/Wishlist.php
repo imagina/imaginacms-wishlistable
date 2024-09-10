@@ -279,7 +279,7 @@ class Wishlist extends Component
   public function deleteFromWishlist($id,$entityType=null,$params = null)
   {
 
-    \Log::info($this->log."deleteFromWishlist");
+    //\Log::info($this->log."deleteFromWishlist");
     $user = \Auth::user() ?? null;
 
     //Validate session
@@ -304,7 +304,7 @@ class Wishlist extends Component
       $item = $this->wishlistService()->getItemFromWishlist($paramsToQuery);
 
       if(isset($item->id)){
-        \Log::info($this->log."deleteFromWishlist|WishlistableId: ".$item->id);
+        //\Log::info($this->log."deleteFromWishlist|WishlistableId: ".$item->id);
         //$item->delete();
         //app('Modules\Wishlistable\Repositories\WishlistableRepository')->deleteBy($item->id);
         $this->wislistableRepository()->deleteBy($item->id);
