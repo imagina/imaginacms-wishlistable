@@ -63,12 +63,11 @@ class WishlistService
                 );
                 
             }else{
-               
                 // Lists exists
                 //Update or create only items
-                $list->wishlistables()->updateOrCreate(
+                $this->wishlistableRepository->updateOrCreate(
                     ['wishlist_id' => $list->id, 'wishlistable_type' => $data["entityName"], 'wishlistable_id' => $data["entityId"]]
-                ); 
+                );
     
             }
 
