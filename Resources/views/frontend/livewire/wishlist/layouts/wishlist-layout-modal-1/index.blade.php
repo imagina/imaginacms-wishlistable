@@ -1,4 +1,4 @@
-<div class="wishlist-layout-modal-1">
+<div class="wishlist-layout-modal-1" wire:init="initProcess">
 
 	<!-- Button -->
 	<x-isite::button buttonClasses="button-base button-secondary button-normal rounded"
