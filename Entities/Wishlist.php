@@ -54,13 +54,5 @@ class Wishlist extends CrudModel
     return $url;
   }
 
-    public function getCacheClearableData()
-    {
-        return [
-            'urls' => [
-                $this->url
-            ]
-        ];
-    }
 
 }

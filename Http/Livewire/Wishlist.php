@@ -36,7 +36,7 @@ class Wishlist extends Component
   {
 
     //\Log::info($this->log."Mount|");
-    $this->user = \Auth::user() ?? null;
+    //$this->user = \Auth::user() ?? null;
 
     $this->layout = $layout;
     $this->layoutButton = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".buttons.".$layoutButton;
@@ -50,18 +50,6 @@ class Wishlist extends Component
     $this->classWishlists = $classWishlists;
     $this->styleWishlists = $styleWishlists;
     
-    //Only for this case
-    if($this->layout=="wishlist-layout-modal-list-1"){
-      $this->wishlistSelected = null;
-      $this->showInfor = false;
-      $this->getWishlists();
-    }else{
-      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
-      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
-      $this->initQuantity();
-    }
-   
-    
   }
 
   /**
@@ -74,7 +62,8 @@ class Wishlist extends Component
     $base = [
       'deleteFromWishlist' => "deleteFromWishlist",
       'initWishlistQuantity' => "initQuantity",
-      'addToWishList_'.$this->id => "addToWishList" // Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
+      'addToWishList_'.$this->id => "addToWishList", //Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
+      'updateWishLists' => "getWishlists" //Se agrega como listener para que tambien actualicé el select en los otros componentes (Ejm: Carrusel cada producto)
     ];
   
     //Case: Button add wishlist in product show (next to add cart button)
@@ -84,6 +73,26 @@ class Wishlist extends Component
 
     return $base;
     
+  }
+
+  /**
+   * INIT METHOD
+   */
+  public function initProcess()
+  { 
+    //\Log::info($this->log."initProcess");
+
+    $this->user = \Auth::user() ?? null;
+
+    if($this->layout=="wishlist-layout-modal-list-1"){
+      $this->wishlistSelected = null;
+      $this->showInfor = false;
+      $this->getWishlists();
+    }else{
+      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
+      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
+      $this->initQuantity();
+    }
   }
 
   /**
@@ -192,10 +201,11 @@ class Wishlist extends Component
           $this->initQuantity();
         }
 
-        //Case: Modal Wishlist in product show | After Create List
+        //Case: Modal Wishlist in product show or other | After Create List
         if(isset($fromModalList)){
           $message = "wishlistable::wishlistables.messages.listAdded";
-          $this->getWishlists();
+          //Case Cache: Con el $this->getWishlists() funcionaba pero con cache activo no.
+          $this->emit("updateWishLists");
           $this->wishlistSelected = $result->id;
           $this->showInforToCreate(); //Hide the infor
           $this->wishlistTitle = "";
@@ -257,6 +267,11 @@ class Wishlist extends Component
    
   }
 
+  private function wislistableRepository()
+  {
+    return app('Modules\Wishlistable\Repositories\WishlistableRepository');
+  }
+
   /**
    *  Wishlist - DELETE ITEM
    * @param $id (wishlistable Id or Entity Id)
@@ -265,9 +280,10 @@ class Wishlist extends Component
   {
 
     //\Log::info($this->log."deleteFromWishlist");
-   
+    $user = \Auth::user() ?? null;
+
     //Validate session
-    if (!$this->user) {
+    if (!$user) {
       $this->alert('warning', trans('wishlistable::wishlistables.messages.unauthenticated'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")
@@ -288,8 +304,11 @@ class Wishlist extends Component
       $item = $this->wishlistService()->getItemFromWishlist($paramsToQuery);
 
       if(isset($item->id)){
-        $item->delete();
-        
+        //\Log::info($this->log."deleteFromWishlist|WishlistableId: ".$item->id);
+        //$item->delete();
+        //app('Modules\Wishlistable\Repositories\WishlistableRepository')->deleteBy($item->id);
+        $this->wislistableRepository()->deleteBy($item->id);
+
         //Update the Isite - ItemList
         $this->emit("itemsListGetData",['onlyResetList' => true]);
 
