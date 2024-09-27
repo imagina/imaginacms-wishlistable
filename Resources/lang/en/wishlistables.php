@@ -23,6 +23,7 @@ return [
     ],
     'messages' => [
         'unauthenticated' => 'User Unauthenticated',
+        'itemAdded' => 'Added to your wish list',
         'productAdded' => 'Product added into wishlist',
         'itemDeleted' => 'Item removed from your wishlist',
         'noItems' => 'No any items in your wishlist',
