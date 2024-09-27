@@ -12,5 +12,7 @@ class CacheWishlistableDecorator extends BaseCacheCrudDecorator implements Wishl
         parent::__construct();
         $this->entityName = 'wishlistable.wishlistables';
         $this->repository = $wishlistable;
+        $this->tags = ['wishlistable.wishlists','icommerce.products'];
     }
+    
 }

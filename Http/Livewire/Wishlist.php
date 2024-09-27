@@ -27,22 +27,22 @@ class Wishlist extends Component
   public $icon;
   public $classWishlists;
   public $styleWishlists;
-
+ 
   private $params;
   private $log = "Wishlistable: Livewire|Wishlist|";
 
   public function mount(Request $request, $showButton = false, $layout = "wishlist-layout-1",
-                                $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
-                                $icon = 'fa fa-heart', $layoutButton = "icon"
+                        $item = null, $label = '', $classWishlists = 'mx-1', $styleWishlists = '',
+                        $icon = 'fa fa-heart', $layoutButton = "icon"
   )
   {
 
     //\Log::info($this->log."Mount|");
-    $this->user = \Auth::user() ?? null;
+    //$this->user = \Auth::user() ?? null;
 
     $this->layout = $layout;
     $this->layoutButton = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".buttons.".$layoutButton;
-    $this->view = "wishlistable::frontend.livewire.wishlist.layouts." . $this->layout . ".index";
+    $this->view = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".index";
     $this->item = $item;
 
     $this->showButton = $showButton;
@@ -51,18 +51,7 @@ class Wishlist extends Component
     $this->icon = $icon;
     $this->classWishlists = $classWishlists;
     $this->styleWishlists = $styleWishlists;
-
-    //Only for this case
-    if ($this->layout == "wishlist-layout-modal-list-1") {
-      $this->wishlistSelected = null;
-      $this->showInfor = false;
-      $this->getWishlists();
-    }else{
-      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes
-      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
-      $this->initQuantity();
-    }
-    $this->initQuantity();
+    
   }
 
   /**
@@ -70,21 +59,42 @@ class Wishlist extends Component
    */
   protected function getListeners()
   {
-
+    
     //Base Listeners
     $base = [
       'deleteFromWishlist' => "deleteFromWishlist",
       'initWishlistQuantity' => "initQuantity",
-      'addToWishList_'.$this->id => "addToWishList" // Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
+      'addToWishList_'.$this->id => "addToWishList", //Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
+      'updateWishLists' => "getWishlists" //Se agrega como listener para que tambien actualicé el select en los otros componentes (Ejm: Carrusel cada producto)
     ];
-
+  
     //Case: Button add wishlist in product show (next to add cart button)
     //Esto es para que evitar que ingrese varias veces xq luego tambien pueden llamar el componente dentro de carruseles etc.
     if($this->layout=="wishlist-layout-1")
       $base['addToWishList'] = 'addToWishList';
 
     return $base;
+    
+  }
 
+  /**
+   * INIT METHOD
+   */
+  public function initProcess()
+  { 
+    //\Log::info($this->log."initProcess");
+
+    $this->user = \Auth::user() ?? null;
+
+    if($this->layout=="wishlist-layout-modal-list-1"){
+      $this->wishlistSelected = null;
+      $this->showInfor = false;
+      $this->getWishlists();
+    }else{
+      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
+      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
+      $this->initQuantity();
+    }
   }
 
   /**
@@ -92,11 +102,11 @@ class Wishlist extends Component
    */
   public function initQuantity()
   {
-
-    if (isset($this->user->id))
+    
+    if(isset($this->user->id))
       $this->quantity = $this->wishlistService()->getQuantity($this->user);
   }
-
+  
   /**
    * @return wishlistService
    */
@@ -114,16 +124,16 @@ class Wishlist extends Component
   }
 
   /**
-   * Wishlist - GET Wishlists from user logged
-   */
+  * Wishlist - GET Wishlists from user logged
+  */
   public function getWishlists()
   {
     $this->wishlists = null;
 
-    if (!is_null($this->user)) {
+    if(!is_null($this->user)){
       $wishlists = $this->wishlistService()->getUserWishlists($this->user->id);
-
-      if (!is_null($wishlists)) {
+      
+      if(!is_null($wishlists)){
         $this->wishlists = $wishlists;
       }
     }
@@ -138,12 +148,13 @@ class Wishlist extends Component
    */
   public function addToWishList($data = null)
   {
+
     //\Log::info($this->log."Layout: ".$this->layout);
     //\Log::info($this->log."addToWishList|Data: ".json_encode($data));
-
+   
     //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
-
+    
     //Validate session
     if (!$this->user) {
       $this->alert('warning', trans('wishlistable::wishlistables.messages.unauthenticated'), [
@@ -152,73 +163,74 @@ class Wishlist extends Component
       ]);
     } else {
 
-      //Validation when data come from Modal List
+      //Validation when data come from Modal List 
       $continue = true;
-      if ($data == "createFromModalList") {
-
-        if (empty($this->wishlistTitle)) {
-
+      if($data=="createFromModalList"){
+        
+        if(empty($this->wishlistTitle)){
+         
           $this->alert('warning', trans('wishlistable::wishlistables.messages.title empty'), [
             'position' => 'top-end',
             'iconColor' => setting("isite::brandPrimary", "#fff")
           ]);
           $continue = false;
 
-        } else {
-          //Checkpoint
-          $fromModalList = true;
-          //Clean data
-          $data = null;
-          //Set title
-          $data['title'] = $this->wishlistTitle;
+        }else{ 
+            //Checkpoint
+            $fromModalList = true;
+            //Clean data
+            $data= null;
+            //Set title
+            $data['title'] = $this->wishlistTitle;
         }
-
+        
       }
-
+      
       //Continue normal process
-      if ($continue) {
+      if($continue){
 
         //Create or update list
-        $result = $this->wishlistService()->createOrUpdateList($data, $this->user);
+        $result = $this->wishlistService()->createOrUpdateList($data,$this->user);
 
         //Case: Modal Wishlist Index | After Create List
-        if (isset($data['title']) && !isset($fromModalList)) {
+        if(isset($data['title']) && !isset($fromModalList)){
           //Set message
           $message = "wishlistable::wishlistables.messages.listAdded";
           //Update the Isite ItemList
-          $this->emit("itemsListGetData", ['onlyResetList' => true]);
+          $this->emit("itemsListGetData",['onlyResetList' => true]);
 
-        } else {
+        }else{
           $this->initQuantity();
         }
 
-        //Case: Modal Wishlist in product show | After Create List
-        if (isset($fromModalList)) {
+        //Case: Modal Wishlist in product show or other | After Create List
+        if(isset($fromModalList)){
           $message = "wishlistable::wishlistables.messages.listAdded";
-          $this->getWishlists();
+          //Case Cache: Con el $this->getWishlists() funcionaba pero con cache activo no.
+          $this->emit("updateWishLists");
           $this->wishlistSelected = $result->id;
           $this->showInforToCreate(); //Hide the infor
           $this->wishlistTitle = "";
         }
-
+          
 
         //Case: Modal Wishlist in product show | After Add item to Wishlist selected
-        if (isset($data['closeModal'])) {
+        if(isset($data['closeModal'])){
           $this->dispatchBrowserEvent('wishlist-close-modal',["entityId" => $data['entityId']]);
         }
 
         //Case: Button add wishlist in product show (next to add cart button)
-        if (isset($data['fromBtnAddWishlist'])) {
-          $this->getWishlists();
+        if(isset($data['fromBtnAddWishlist'])){
+            $this->getWishlists();
         }
-
+    
         //Message
         $this->alert('success', trans($message), config("asgard.isite.config.livewireAlerts"));
 
       }
 
     }
-
+    
   }
 
   /*
@@ -230,15 +242,15 @@ class Wishlist extends Component
     //\Log::info($this->log."btnAddItemToWishlist");
 
     //Validation List Selected
-    if (empty($this->wishlistSelected) || $this->wishlistSelected == "0") {
+    if(empty($this->wishlistSelected) || $this->wishlistSelected=="0"){
 
       $this->alert('warning', trans('wishlistable::wishlistables.messages.listEmpty'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")
       ]);
 
-    } else {
-
+    }else{
+      
       //Set Data to item for this wishlist
       $data["wishlistId"] = $this->wishlistSelected;
       $data['entityId'] = $itemId;
@@ -249,37 +261,43 @@ class Wishlist extends Component
 
       //Call Process
       $this->addToWishList($data);
-
+      
       //Message
       $this->alert('success', trans('wishlistable::wishlistables.messages.itemAdded'), config("asgard.isite.config.livewireAlerts"));
 
     }
+   
+  }
 
+  private function wislistableRepository()
+  {
+    return app('Modules\Wishlistable\Repositories\WishlistableRepository');
   }
 
   /**
    *  Wishlist - DELETE ITEM
    * @param $id (wishlistable Id or Entity Id)
    */
-  public function deleteFromWishlist($id, $entityType = null, $params = null)
+  public function deleteFromWishlist($id,$entityType=null,$params = null)
   {
 
     //\Log::info($this->log."deleteFromWishlist");
+    $user = \Auth::user() ?? null;
 
     //Validate session
-    if (!$this->user) {
+    if (!$user) {
       $this->alert('warning', trans('wishlistable::wishlistables.messages.unauthenticated'), [
         'position' => 'top-end',
         'iconColor' => setting("isite::brandPrimary", "#fff")
       ]);
     } else {
-
+      
       //Extra params (Case: Delete from other List Item - Products)
-      if (!is_null($params)) {
+      if(!is_null($params)){
         $paramsToQuery['wishlistableId'] = $id;
         $paramsToQuery['wishlistableType'] = $entityType;
         $paramsToQuery['wishlistId'] = (int)$params['wishlistId'];
-      } else {
+      }else{
         // Case - Wishlistable Id
         $paramsToQuery['id'] = $id;
       }
@@ -287,16 +305,19 @@ class Wishlist extends Component
       //Search wishlistable
       $item = $this->wishlistService()->getItemFromWishlist($paramsToQuery);
 
-      if (isset($item->id)) {
-        $item->delete();
+      if(isset($item->id)){
+        //\Log::info($this->log."deleteFromWishlist|WishlistableId: ".$item->id);
+        //$item->delete();
+        //app('Modules\Wishlistable\Repositories\WishlistableRepository')->deleteBy($item->id);
+        $this->wislistableRepository()->deleteBy($item->id);
 
         //Update the Isite - ItemList
-        $this->emit("itemsListGetData", ['onlyResetList' => true]);
+        $this->emit("itemsListGetData",['onlyResetList' => true]);
 
         //Message
         $this->alert('success', trans('wishlistable::wishlistables.messages.itemDeleted'), config("asgard.isite.config.livewireAlerts"));
       }
-
+ 
     }
 
   }
@@ -306,7 +327,7 @@ class Wishlist extends Component
    */
   public function showInforToCreate()
   {
-    $this->showInfor = !$this->showInfor;
+      $this->showInfor  = !$this->showInfor;
   }
-
+  
 }
