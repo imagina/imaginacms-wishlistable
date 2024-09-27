@@ -63,7 +63,8 @@ class Wishlist extends Component
       'deleteFromWishlist' => "deleteFromWishlist",
       'initWishlistQuantity' => "initQuantity",
       'addToWishList_'.$this->id => "addToWishList", //Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
-      'updateWishLists' => "getWishlists" //Se agrega como listener para que tambien actualicé el select en los otros componentes (Ejm: Carrusel cada producto)
+      'initProcess_'.$this->id => 'initProcess' //Para que el INIT solo se ejecute cuando le dan click al boton
+      //'updateWishLists' => "getWishlists", //Se agrega como listener para que tambien actualicé el select en los otros componentes (Ejm: Carrusel cada producto)
     ];
   
     //Case: Button add wishlist in product show (next to add cart button)
@@ -80,10 +81,11 @@ class Wishlist extends Component
    */
   public function initProcess()
   { 
-    //\Log::info($this->log."initProcess");
+    //\Log::info($this->log."initProcess|id: ".$this->id);
 
     $this->user = \Auth::user() ?? null;
 
+    //Layout del Modal
     if($this->layout=="wishlist-layout-modal-list-1"){
       $this->wishlistSelected = null;
       $this->showInfor = false;
@@ -126,6 +128,7 @@ class Wishlist extends Component
   */
   public function getWishlists()
   {
+    //\Log::info($this->log."getWishlists|");
     $this->wishlists = null;
 
     if(!is_null($this->user)){
@@ -147,8 +150,15 @@ class Wishlist extends Component
   public function addToWishList($data = null)
   {
 
-    //\Log::info($this->log."Layout: ".$this->layout);
+    //\Log::info($this->log."addToWishList|Layout: ".$this->layout);
     //\Log::info($this->log."addToWishList|Data: ".json_encode($data));
+
+    //Layout del boton que esta en el show 
+    // Como ya no se inicializa el usuario en el Init, toca verificarlo para este caso directamente
+    if($this->layout=="wishlist-layout-1"){
+      $this->user = \Auth::user() ?? null;
+    }
+
    
     //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
@@ -204,8 +214,12 @@ class Wishlist extends Component
         //Case: Modal Wishlist in product show or other | After Create List
         if(isset($fromModalList)){
           $message = "wishlistable::wishlistables.messages.listAdded";
-          //Case Cache: Con el $this->getWishlists() funcionaba pero con cache activo no.
-          $this->emit("updateWishLists");
+          
+          $this->getWishlists();
+
+          //Esto se omitió porque actualizaba todo
+          //$this->emit("updateWishLists");
+          
           $this->wishlistSelected = $result->id;
           $this->showInforToCreate(); //Hide the infor
           $this->wishlistTitle = "";

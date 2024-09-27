@@ -1,4 +1,4 @@
-<div class="wishlist-layout-modal-list-1" wire:init="initProcess">
+<div class="wishlist-layout-modal-list-1">
 
   @include($layoutButton)
 
