@@ -13,6 +13,7 @@
               sizeLabel="16"
               color="dark"
               dataTarget="#wishlistAddList{{$item->id}}"
+              onclick="window.livewire.emit('initProcess_{{$this->id}}')"
 
       />
       

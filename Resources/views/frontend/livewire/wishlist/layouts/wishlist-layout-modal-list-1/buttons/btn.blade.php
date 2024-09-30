@@ -11,6 +11,9 @@
                 :withLabel="true"
                 :label="trans('wishlistable::wishlists.title.add to wishlist')"
                 dataTarget="#wishlistAddList{{$item->id}}"
+                onclick="window.livewire.emit('initProcess_{{$this->id}}')"
         />
+
+        
     </div>
 </div>
