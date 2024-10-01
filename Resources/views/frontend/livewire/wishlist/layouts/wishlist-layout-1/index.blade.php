@@ -1,12 +1,15 @@
 <div class="wishlist wishlist-layout-1">
-@if($showButton)
-	<a href="{{\URL::route(\LaravelLocalization::getCurrentLocale() . '.wishlistable.wishlist.index')}}" class="btn-wishlist {{$classWishlists}}">
-		@if(!empty($quantity))
-		   <span class="quantity text-dark">{{$quantity}}</span>
-		@endif
-		<i class="{{$icon}}" aria-hidden="true"></i><span class="wishlist-label">{{$label}}</span>
-	</a>
-@endif
+	@if($showButton)
+		<a href="{{\URL::route(\LaravelLocalization::getCurrentLocale() . '.wishlistable.wishlist.index')}}" class="btn-wishlist {{$classWishlists}}">
+			@if(!empty($quantity))
+			<span class="quantity text-dark">{{$quantity}}</span>
+			@endif
+			<i class="{{$icon}}" aria-hidden="true"></i><span class="wishlist-label">{{$label}}</span>
+		</a>
+	@endif
+		
+	@include('wishlistable::frontend.partials.modal')
+
 </div>
 @section('scripts')
 	@parent
