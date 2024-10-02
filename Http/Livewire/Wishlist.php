@@ -81,7 +81,7 @@ class Wishlist extends Component
    */
   public function initProcess($data = null)
   { 
-    \Log::info($this->log."initProcess|");
+    //\Log::info($this->log."initProcess|");
 
     $this->loading = true;
 
