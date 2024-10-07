@@ -25,6 +25,7 @@ class Wishlist extends Component
   public $icon;
   public $classWishlists;
   public $styleWishlists;
+  public $loading = true; //Default true para que muestre la infor despues del initProcess
  
   private $params;
   private $log = "Wishlistable: Livewire|Wishlist|";
@@ -34,9 +35,6 @@ class Wishlist extends Component
                         $icon = 'fa fa-heart', $layoutButton = "icon"
   )
   {
-
-    //\Log::info($this->log."Mount|");
-    //$this->user = \Auth::user() ?? null;
 
     $this->layout = $layout;
     $this->layoutButton = "wishlistable::frontend.livewire.wishlist.layouts.".$this->layout.".buttons.".$layoutButton;
@@ -49,7 +47,10 @@ class Wishlist extends Component
     $this->icon = $icon;
     $this->classWishlists = $classWishlists;
     $this->styleWishlists = $styleWishlists;
-    
+
+    //Layout del Header
+    if($showButton) $this->initQuantity();
+
   }
 
   /**
@@ -62,15 +63,10 @@ class Wishlist extends Component
     $base = [
       'deleteFromWishlist' => "deleteFromWishlist",
       'initWishlistQuantity' => "initQuantity",
+      'addToWishList' => "addToWishList",
       'addToWishList_'.$this->id => "addToWishList", //Esto es para evitar que lo ejecute 2 veces cuando agrega desde la modal
-      'initProcess_'.$this->id => 'initProcess' //Para que el INIT solo se ejecute cuando le dan click al boton
-      //'updateWishLists' => "getWishlists", //Se agrega como listener para que tambien actualicé el select en los otros componentes (Ejm: Carrusel cada producto)
+      'initProcess' => "initProcess"
     ];
-  
-    //Case: Button add wishlist in product show (next to add cart button)
-    //Esto es para que evitar que ingrese varias veces xq luego tambien pueden llamar el componente dentro de carruseles etc.
-    if($this->layout=="wishlist-layout-1")
-      $base['addToWishList'] = 'addToWishList';
 
     return $base;
     
@@ -78,23 +74,40 @@ class Wishlist extends Component
 
   /**
    * INIT METHOD
+   * Onclick | Partials Buttons
+   * wishlist-layout-modal-1 | Wishlist Modal Basic (Create List)
    */
-  public function initProcess()
+  public function initProcess($data = null)
   { 
-    //\Log::info($this->log."initProcess|id: ".$this->id);
+    //\Log::info($this->log."initProcess|");
 
-    $this->user = \Auth::user() ?? null;
+    $this->loading = true;
 
-    //Layout del Modal
-    if($this->layout=="wishlist-layout-modal-list-1"){
-      $this->wishlistSelected = null;
-      $this->showInfor = false;
+    $this->checkUserLogged();
+
+    if(isset($data['from']) && $data['from']=='createFromModalList'){
+
+      //El item que llega sea diferente al que ya eligió
+      if(!is_null($this->item) && $this->item->id!=$data['entityId']) $this->item = null;
+
+      //Validation to repeat
+      if(is_null($this->item)){
+        $this->wishlistSelected = null;
+        $this->showInfor = false;
+        
+        //Obtener la data del Item necesaria para la informacion en la Modal
+        $itemRepository = $this->getItemRepository($data['entityName']);
+        $this->item = $itemRepository->getItem($data['entityId']);
+
+      }
+
+      //Case Cache
       $this->getWishlists();
-    }else{
-      //Recordar que: se reutiliza el mismo componente, con diferentes layouts en varias partes 
-      //Se cambió para aca porque en los carruseles de producto se incluye el mismo componente y repetia el query
-      $this->initQuantity();
+
     }
+
+    $this->loading = false;
+
   }
 
   /**
@@ -103,8 +116,11 @@ class Wishlist extends Component
   public function initQuantity()
   {
     
+    $this->checkUserLogged();
+
     if(isset($this->user->id))
       $this->quantity = $this->wishlistService()->getQuantity($this->user);
+    
   }
   
   /**
@@ -152,14 +168,9 @@ class Wishlist extends Component
 
     //\Log::info($this->log."addToWishList|Layout: ".$this->layout);
     //\Log::info($this->log."addToWishList|Data: ".json_encode($data));
+ 
+    $this->checkUserLogged();
 
-    //Layout del boton que esta en el show 
-    // Como ya no se inicializa el usuario en el Init, toca verificarlo para este caso directamente
-    if($this->layout=="wishlist-layout-1"){
-      $this->user = \Auth::user() ?? null;
-    }
-
-   
     //Default message
     $message = "wishlistable::wishlistables.messages.itemAdded";
     
@@ -341,5 +352,34 @@ class Wishlist extends Component
   {
       $this->showInfor  = !$this->showInfor;
   }
+
+  /**
+   * Como ya no se inicializa el usuario en el Init, toca verificarlo directamente | Case: Cache
+   */
+  public function checkUserLogged()
+  {
+     
+    if(is_null($this->user)){
+      $this->user = \Auth::user() ?? null;
+    }
+
+  }
+
+  /**
+   * Get repository from item
+   */
+  public function getItemRepository($itemClass)
+  {
+    switch ($itemClass) {
+      case 'Modules\Icommerce\Entities\Product':
+        return app('Modules\Icommerce\Repositories\ProductRepository');
+        break;
+      
+      default:
+        return app('Modules\Icommerce\Repositories\ProductRepository');
+        break;
+    }
+  }
+
   
 }
