@@ -72,6 +72,8 @@ class PublicController extends BaseApiController
 
     if(!is_null($wishlist)){
 
+      if($user->id!=$wishlist->user_id) throw new \Exception('Wishlist not found for this user', 404);
+
       $type = $this->wishlistableService->getType($wishlist->type);
 
       //specific tpl (Item list default is with 'product information' but others may need to be customized later depnds of wishlist type)
