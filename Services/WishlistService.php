@@ -5,10 +5,10 @@ namespace Modules\Wishlistable\Services;
 
 class WishlistService
 {
-    
+
     private $wishlistRepository;
     private $wishlistableRepository;
-  
+
     public function __construct()
     {
        $this->wishlistRepository = app('Modules\Wishlistable\Repositories\WishlistRepository');
@@ -51,24 +51,24 @@ class WishlistService
                 // Case: Button in product show
                 $list = $this->getWishListUser($user->id);
             }
-            
+
             //Create default List
             if(is_null($list)){
-    
+
                 $list = $this->createWishlist($data,$user);
-    
+
                 //Create item for the List
                 $list->wishlistables()->create(
                     ['wishlist_id' => $list->id, 'wishlistable_type' => $data["entityName"], 'wishlistable_id' => $data["entityId"]]
                 );
-                
+
             }else{
                 // Lists exists
                 //Update or create only items
                 $this->wishlistableRepository->updateOrCreate(
-                    ['wishlist_id' => $list->id, 'wishlistable_type' => $data["entityName"], 'wishlistable_id' => $data["entityId"]]
+                    ['wishlist_id' => $list->id], ['wishlistable_type' => $data["entityName"], 'wishlistable_id' => $data["entityId"]]
                 );
-    
+
             }
 
         }
@@ -80,13 +80,13 @@ class WishlistService
     * Get user wishlist (Case Default)
     */
     public function getWishListUser($userId)
-    {   
-        
+    {
+
         $params = ['filter' => [
             'field' => 'user_id']
         ];
         $wishlist = $this->wishlistRepository->getItem($userId,json_decode(json_encode($params)));
-        
+
         return $wishlist;
     }
 
@@ -94,13 +94,13 @@ class WishlistService
      * Get title to the list by entity name
      */
     public function getTitle($entityName)
-    {   
+    {
 
         switch ($entityName) {
             case 'Modules\Iad\Entities\Ad':
                 $title = "wishlistable::wishlists.types.ad.title";
                 break;
-            
+
             default:
                 $title = "wishlistable::wishlists.types.product.title";
                 break;
@@ -108,7 +108,7 @@ class WishlistService
 
         return trans($title);
     }
-    
+
     /**
      * Get Quantity from wishlistable to specific user (Case Default)
      */
@@ -120,7 +120,7 @@ class WishlistService
 
         if(!is_null($list))
             $quantity = $list->wishlistables()->get()->count();
-        
+
         return $quantity;
     }
 
@@ -128,13 +128,13 @@ class WishlistService
     * Get user lists (all)
     */
     public function getUserWishlists($userId)
-    {   
-        
+    {
+
         $params = ['filter' => [
             'user_id' => $userId]
         ];
         $wishlists = $this->wishlistRepository->getItemsBy(json_decode(json_encode($params)));
-        
+
         return $wishlists;
     }
 
@@ -142,19 +142,19 @@ class WishlistService
      * Get specific Wishlist
      */
     public function getWishlist($id)
-    {    
+    {
         $wishlist = $this->wishlistRepository->getItem($id);
         return $wishlist;
     }
-    
+
     /**
      * Get specific item from Wishlistable
      * @param $id (Wishlistable Id)
      */
     public function getItemFromWishlist($params)
-    {    
+    {
         if(isset($params['wishlistableType'])){
-            
+
             //Base
             $searchParams = ['filter' => $params];
 
@@ -164,7 +164,7 @@ class WishlistService
 
             //Search
             $item = $this->wishlistableRepository->getItem($criteria,json_decode(json_encode($searchParams)));
-            
+
         }else{
             $item = $this->wishlistableRepository->getItem($id); //wishlistable id
         }
@@ -175,13 +175,13 @@ class WishlistService
      * Get specific type from Wishlist
      */
     public function getType($entityName)
-    {   
+    {
         $sepType = explode("\\",$entityName);
         $type = strtolower($sepType[3]);
 
         return $type;
     }
 
-    
+
 
 }
