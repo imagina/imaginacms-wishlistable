@@ -7,7 +7,6 @@ use Modules\Core\Icrud\Entities\CrudModel;
 
 class Wishlistable extends CrudModel
 {
-  use Translatable;
 
   protected $table = 'wishlistable__wishlistables';
   public $transformer = 'Modules\Wishlistable\Transformers\WishlistableTransformer';
@@ -43,7 +42,7 @@ class Wishlistable extends CrudModel
   }
 
   public function getUrlAttribute($locale = null)
-  { 
+  {
     $url = "";
     $currentLocale = $locale ?? locale();
 
@@ -62,5 +61,5 @@ class Wishlistable extends CrudModel
       ];
 
   }
-  
+
 }
