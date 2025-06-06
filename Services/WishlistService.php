@@ -66,7 +66,7 @@ class WishlistService
                 // Lists exists
                 //Update or create only items
                 $this->wishlistableRepository->updateOrCreate(
-                    ['wishlist_id' => $list->id, 'wishlistable_type' => $data["entityName"], 'wishlistable_id' => $data["entityId"]]
+                    ['wishlist_id' => $list->id, 'wishlistable_type' => $data["entityName"], 'wishlistable_id' => $data["entityId"]], []
                 );
     
             }
